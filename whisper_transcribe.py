@@ -3,7 +3,7 @@ from whisper.utils import get_writer
 from whisper import Whisper
 
 
-class WhisperTranscribe:
+class WhisperTranscriber:
 
     def __init__(self, model: Whisper):
         self.model = model
@@ -31,7 +31,8 @@ class WhisperTranscribe:
         try:
             print(f"開始轉譯: {audio_path}")
             result = self.model.transcribe(audio_path, **options_setting)
-            self.trans2srt(result)
+            self._trans2srt(result)
+            self._trans2txt(result)
         except Exception as e:
             print(e)
 
@@ -69,8 +70,8 @@ class WhisperTranscribe:
         # 轉換格式
         timestamps_and_text = []
         for item in segments:
-            start = self.format_time(item["start"])
-            end = self.format_time(item["end"])
+            start = self._format_time(item["start"])
+            end = self._format_time(item["end"])
             text = item["text"]
             timestamps_and_text.append(f"[{start} --> {end}] {text}")
 
